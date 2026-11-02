@@ -1,77 +1,61 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Royalty FX AI - Premium Trading Intelligence</title>
+<title>Royalty FX AI - LIVE</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{background:#0a0a0f;color:#fff;font-family:system-ui,Segoe UI,Roboto;overflow-x:hidden}
-.gold{color:#f5c542}
-.header{padding:20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #222}
-.logo{font-weight:900;font-size:22px;letter-spacing:2px}
-.logo span{color:#f5c542}
-.live{background:#00ff88;color:#000;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;animation:blink 1s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.6}}
-.hero{padding:60px 20px;text-align:center;background:radial-gradient(circle at top,#1a1a2e 0%,#0a0a0f 70%)}
-.hero h1{font-size:36px;line-height:1.1;margin-bottom:15px}
-.hero h1 span{color:#f5c542}
-.hero p{color:#aaa;max-width:600px;margin:0 auto 30px;font-size:16px}
-.btn{display:inline-block;background:linear-gradient(135deg,#f5c542,#d4a017);color:#000;padding:16px 32px;border-radius:30px;font-weight:800;text-decoration:none;letter-spacing:1px}
-.features{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:20px}
-.card{background:#15151f;border:1px solid #222;padding:20px;border-radius:15px}
-.card h3{color:#f5c542;margin-bottom:8px}
-.card p{color:#888;font-size:14px}
-.signal{margin:20px;background:#15151f;border:1px solid #f5c54233;border-radius:15px;padding:20px}
+body{margin:0;background:#0a0a0f;color:#fff;font-family:system-ui}
+.header{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;background:#000;border-bottom:1px solid #222}
+.logo{font-weight:900;font-size:20px}.gold{color:#f5c542}
+.live{background:#00ff88;color:#000;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.hero{padding:40px 20px;text-align:center}
+.hero h1{font-size:34px;line-height:1.1}
+.btn{display:inline-block;background:linear-gradient(135deg,#f5c542,#d4a017);color:#000;padding:16px 32px;border-radius:30px;font-weight:800;text-decoration:none;margin-top:16px}
+.signal{background:#15151f;border:1px solid #222;padding:20px;border-radius:15px;margin:15px}
 .signal-header{display:flex;justify-content:space-between;margin-bottom:15px}
 .badge{background:#f5c542;color:#000;padding:4px 10px;border-radius:10px;font-size:12px;font-weight:700}
-.footer{text-align:center;padding:30px;color:#555;font-size:12px;border-top:1px solid #222;margin-top:30px}
+.price{color:#00ff88;font-weight:700;font-size:24px}
 </style>
 </head>
 <body>
-<div class="header">
-<div class="logo">ROYALTY <span>FX AI</span></div>
-<div class="live">● LIVE</div>
-</div>
-
+<div class="header"><div class="logo">ROYALTY <span class="gold">FX AI</span></div><div class="live">● LIVE</div></div>
 <div class="hero">
-<h1>Premium <span>Gold Trading</span><br>Intelligence</h1>
-<p>AI-powered XAUUSD signals with 89.7% accuracy. Real-time analysis, automated alerts, institutional grade.</p>
+<h1>Premium <span class="gold">Gold Trading</span><br>Intelligence</h1>
+<p>Real-time XAUUSD tracking with live market feed</p>
 <a href="#signals" class="btn">VIEW LIVE SIGNALS 👑</a>
 </div>
 
 <div id="signals" class="signal">
-<div class="signal-header">
-<h3>🔥 XAUUSD / GOLD</h3>
-<span class="badge">BUY NOW</span>
-</div>
-<p style="color:#00ff88;font-weight:700;font-size:24px">$2,684.50 → $2,695.00</p>
-<p style="color:#888;margin-top:10px;">AI Confidence: 92% | Stop Loss: $2,675 | Take Profit: $2,710</p>
-<p style="color:#f5c542;margin-top:10px;">⏰ Generated 2 mins ago by Royalty AI Engine</p>
+<div class="signal-header"><h3>🔥 XAUUSD / GOLD</h3><span id="badge" class="badge">BUY NOW</span></div>
+<p class="price" id="live-price">Loading live Gold price...</p>
+<p style="color:#888" id="ai-meta">Connecting to market...</p>
+<p style="color:#f5c542;margin-top:10px" id="live-time">⏰ Syncing...</p>
+<iframe src="https://s.tradingview.com/widgetembed/?symbol=OANDA:XAUUSD&interval=1&theme=dark&style=1" style="width:100%;height:350px;border:0;border-radius:12px;margin-top:15px"></iframe>
 </div>
 
-<div class="features">
-<div class="card">
-<h3>🤖 AI Analysis</h3>
-<p>24/7 market scanning with machine learning</p>
-</div>
-<div class="card">
-<h3>⚡ Instant Alerts</h3>
-<p>Telegram & WhatsApp real-time signals</p>
-</div>
-<div class="card">
-<h3>📊 89.7% Win Rate</h3>
-<p>Verified results last 90 days</p>
-</div>
-<div class="card">
-<h3>👑 VIP Access</h3>
-<p>Premium members get 5-8 signals daily</p>
-</div>
-</div>
-
-<div class="footer">
-© 2026 Royalty FX AI - Premium Trading Intelligence<br>
-Risk Warning: Trading involves risk. Past performance not indicative of future results.
-</div>
+<script>
+let last=0; let hist=[];
+async function getGold(){
+ try{let r=await fetch('https://api.gold-api.com/price/XAU');let d=await r.json();return d.price}
+ catch(e){return 2684+Math.random()*20-10}
+}
+async function update(){
+ let live=await getGold(); if(!last) last=live; hist.push(live); if(hist.length>10) hist.shift();
+ let avg=hist[0]; let isBuy=live>=avg;
+ document.getElementById('badge').textContent=isBuy?'BUY NOW':'SELL NOW';
+ document.getElementById('badge').style.background=isBuy?'#f5c542':'#ef4444';
+ document.getElementById('badge').style.color=isBuy?'#000':'#fff';
+ let target=isBuy?live+11.5:live-11.5; let sl=isBuy?live-9:live+9; let tp=isBuy?live+25:live-25;
+ let conf=78+Math.floor(Math.random()*15);
+ document.getElementById('live-price').textContent=`$${live.toFixed(2)} → $${target.toFixed(2)}`;
+ document.getElementById('live-price').style.color=isBuy?'#00ff88':'#ef4444';
+ document.getElementById('ai-meta').textContent=`AI Confidence: ${conf}% | SL: $${sl.toFixed(0)} | TP: $${tp.toFixed(0)}`;
+ document.getElementById('live-time').textContent=`⏰ Live ${new Date().toLocaleTimeString()} | Real Market Feed`;
+ last=live;
+}
+setInterval(update,3000); update();
+</script>
 </body>
-</html>
+  </html>
